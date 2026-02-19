@@ -12,7 +12,12 @@
       "mcp__Windows-MCP__App",
       "mcp__Windows-MCP__Click",
       "mcp__Windows-MCP__Shortcut",
-      "mcp__Windows-MCP__Type"
+      "mcp__Windows-MCP__Type",
+      "Bash(node --version:*)",
+      "Bash(node src/harness/test-suite.js:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ]
   }
 }
