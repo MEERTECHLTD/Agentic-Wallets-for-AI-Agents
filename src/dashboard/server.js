@@ -1014,7 +1014,8 @@ const agentCountBadge = document.getElementById("agentCountBadge");
 
 /* ── WebSocket ────────────────────────────────────────────────── */
 function connect() {
-  ws = new WebSocket(\`ws://\${location.host}\`);
+  const proto = location.protocol === "https:" ? "wss:" : "ws:";
+  ws = new WebSocket(\`\${proto}//\${location.host}\`);
   ws.onopen  = () => { setConnected(true); ping(); };
   ws.onclose = () => { setConnected(false); setTimeout(connect, 3000); };
   ws.onmessage = (ev) => handleMessage(JSON.parse(ev.data));
