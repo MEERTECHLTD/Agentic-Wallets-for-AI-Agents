@@ -28,7 +28,7 @@ import { AgentRunner } from "../agent/AgentRunner.js";
 import { WalletManager } from "../wallet/WalletManager.js";
 import { logger } from "../utils/logger.js";
 
-const PORT = parseInt(process.env.DASHBOARD_PORT || "3000");
+const PORT = parseInt(process.env.PORT || process.env.DASHBOARD_PORT || "3000");
 const AGENT_IDS = (process.env.AGENT_IDS || "agent-01,agent-02,agent-03").split(",").map((s) => s.trim());
 const TICK_MS = parseInt(process.env.AGENT_DECISION_INTERVAL_MS || "20000");
 
