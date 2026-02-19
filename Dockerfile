@@ -51,8 +51,8 @@ ENV AGENT_MAX_SOL_PER_TX=0.01
 ENV LOG_LEVEL=info
 ENV DASHBOARD_PORT=3000
 
-# Persist wallet files and logs
-VOLUME ["/app/wallets", "/app/logs", "/app/data"]
+# Note: Railway does not allow VOLUME keyword – directories are created at runtime
+# Mount persistent storage via Railway Volumes in the Railway dashboard if needed
 
 EXPOSE 3000
 
