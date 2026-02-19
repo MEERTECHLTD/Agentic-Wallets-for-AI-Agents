@@ -10,7 +10,9 @@
       "mcp__Windows-MCP__Wait",
       "mcp__Windows-MCP__Snapshot",
       "mcp__Windows-MCP__App",
-      "mcp__Windows-MCP__Click"
+      "mcp__Windows-MCP__Click",
+      "mcp__Windows-MCP__Shortcut",
+      "mcp__Windows-MCP__Type"
     ]
   }
 }

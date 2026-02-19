@@ -170,11 +170,11 @@ function getDashboardHTML() {
     --bg-elevated:   #342F2E;   /* hover / elevated  */
     --bg-overlay:    #3D3835;   /* input / overlay   */
 
-    --claude-orange:  #DA7756;  /* Claude brand orange */
-    --claude-orange2: #C4603E;  /* darker orange      */
-    --claude-cream:   #F5ECD7;  /* warm cream text    */
-    --claude-tan:     #C9A882;  /* muted cream        */
-    --claude-sand:    #9E8272;  /* very muted         */
+    --claude-orange:  #F28B6B;  /* Claude brand orange – brighter */
+    --claude-orange2: #DA7756;  /* darker orange      */
+    --claude-cream:   #FAF4E8;  /* warm cream text – max bright  */
+    --claude-tan:     #E8D5B8;  /* muted cream – much brighter   */
+    --claude-sand:    #C8AE96;  /* secondary text – brighter     */
 
     --accent-green:  #4ADE80;
     --accent-blue:   #60A5FA;
@@ -201,9 +201,11 @@ function getDashboardHTML() {
     background: var(--bg-base);
     color: var(--claude-cream);
     font-family: var(--font-sans);
-    font-size: 14px;
-    line-height: 1.6;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.65;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
   }
 
   /* ── Noise texture overlay ───────────────────────────────── */
@@ -264,8 +266,8 @@ function getDashboardHTML() {
   }
 
   .brand-text p {
-    font-size: 11px;
-    color: var(--claude-sand);
+    font-size: 12px;
+    color: var(--claude-tan);
     font-family: var(--font-mono);
     letter-spacing: 0.3px;
   }
@@ -281,12 +283,12 @@ function getDashboardHTML() {
     display: flex;
     align-items: center;
     gap: 6px;
-    padding: 5px 12px;
+    padding: 5px 14px;
     border-radius: 100px;
-    background: rgba(74,222,128,0.1);
-    border: 1px solid rgba(74,222,128,0.25);
-    font-size: 11px;
-    font-weight: 600;
+    background: rgba(74,222,128,0.12);
+    border: 1px solid rgba(74,222,128,0.4);
+    font-size: 12px;
+    font-weight: 700;
     color: var(--accent-green);
     letter-spacing: 0.5px;
   }
@@ -398,20 +400,21 @@ function getDashboardHTML() {
   }
 
   .section-title {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--claude-sand);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--claude-tan);
     text-transform: uppercase;
     letter-spacing: 1px;
   }
 
   .section-count {
-    font-size: 11px;
+    font-size: 12px;
     font-family: var(--font-mono);
+    font-weight: 600;
     color: var(--claude-orange);
-    background: rgba(218,119,86,0.1);
-    border: 1px solid rgba(218,119,86,0.2);
-    padding: 2px 8px;
+    background: rgba(242,139,107,0.12);
+    border: 1px solid rgba(242,139,107,0.35);
+    padding: 3px 10px;
     border-radius: 100px;
   }
 
@@ -433,15 +436,16 @@ function getDashboardHTML() {
   .stat-tile:hover { border-color: var(--border-bright); }
 
   .stat-tile-label {
-    font-size: 11px;
-    color: var(--claude-sand);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--claude-tan);
     text-transform: uppercase;
     letter-spacing: 0.8px;
     margin-bottom: 8px;
   }
 
   .stat-tile-value {
-    font-size: 22px;
+    font-size: 26px;
     font-weight: 700;
     font-family: var(--font-mono);
     color: var(--claude-cream);
@@ -454,9 +458,10 @@ function getDashboardHTML() {
   .stat-tile-value.amber  { color: var(--accent-amber); }
 
   .stat-tile-sub {
-    font-size: 11px;
-    color: var(--claude-sand);
-    margin-top: 3px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--claude-tan);
+    margin-top: 4px;
   }
 
   /* ── Agent cards grid ────────────────────────────────────── */
@@ -518,16 +523,16 @@ function getDashboardHTML() {
   }
 
   .card-name {
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 700;
     color: var(--claude-cream);
     letter-spacing: -0.2px;
   }
 
   .card-pubkey {
-    font-size: 10px;
+    font-size: 11px;
     font-family: var(--font-mono);
-    color: var(--claude-sand);
+    color: var(--claude-tan);
     margin-top: 2px;
     letter-spacing: 0.3px;
   }
@@ -537,10 +542,10 @@ function getDashboardHTML() {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    padding: 4px 10px;
+    padding: 5px 12px;
     border-radius: 100px;
-    font-size: 11px;
-    font-weight: 600;
+    font-size: 12px;
+    font-weight: 700;
     letter-spacing: 0.5px;
     flex-shrink: 0;
   }
@@ -550,8 +555,8 @@ function getDashboardHTML() {
     border-radius: 50%;
   }
 
-  .state-IDLE  { background: rgba(158,130,114,0.15); color: var(--claude-sand); border: 1px solid rgba(158,130,114,0.3); }
-  .state-IDLE .state-dot  { background: var(--claude-sand); }
+  .state-IDLE  { background: rgba(200,174,150,0.18); color: var(--claude-tan); border: 1px solid rgba(200,174,150,0.4); }
+  .state-IDLE .state-dot  { background: var(--claude-tan); }
   .state-TRADE { background: rgba(74,222,128,0.1); color: var(--accent-green); border: 1px solid rgba(74,222,128,0.25); }
   .state-TRADE .state-dot { background: var(--accent-green); animation: pulse-green 1.5s infinite; }
   .state-YIELD { background: rgba(96,165,250,0.1); color: var(--accent-blue); border: 1px solid rgba(96,165,250,0.25); }
@@ -579,26 +584,26 @@ function getDashboardHTML() {
   }
 
   .card-balance-unit {
-    font-size: 13px;
-    color: var(--claude-sand);
-    font-weight: 500;
+    font-size: 14px;
+    color: var(--claude-tan);
+    font-weight: 600;
   }
 
   /* Stat rows */
-  .card-stats { display: flex; flex-direction: column; gap: 8px; }
+  .card-stats { display: flex; flex-direction: column; gap: 9px; }
 
   .card-stat-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 12px;
+    font-size: 13px;
   }
 
-  .card-stat-label { color: var(--claude-sand); }
+  .card-stat-label { color: var(--claude-tan); font-weight: 500; }
 
   .card-stat-value {
     font-family: var(--font-mono);
-    font-weight: 500;
+    font-weight: 600;
     color: var(--claude-cream);
   }
 
@@ -612,8 +617,9 @@ function getDashboardHTML() {
   .card-progress-label {
     display: flex;
     justify-content: space-between;
-    font-size: 11px;
-    color: var(--claude-sand);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--claude-tan);
     margin-bottom: 6px;
   }
 
@@ -644,8 +650,8 @@ function getDashboardHTML() {
     border-radius: 100px;
   }
 
-  .pill-on  { background: rgba(74,222,128,0.1); color: var(--accent-green); }
-  .pill-off { background: rgba(158,130,114,0.1); color: var(--claude-sand); }
+  .pill-on  { background: rgba(74,222,128,0.15); color: var(--accent-green); font-size: 11px; }
+  .pill-off { background: rgba(200,174,150,0.15); color: var(--claude-tan); font-size: 11px; }
 
   /* ── Right panel – event feed ────────────────────────────── */
   .feed-header {
@@ -664,9 +670,9 @@ function getDashboardHTML() {
   }
 
   .feed-title-text {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--claude-sand);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--claude-tan);
     text-transform: uppercase;
     letter-spacing: 1px;
   }
@@ -756,42 +762,43 @@ function getDashboardHTML() {
   .feed-event-body { flex: 1; min-width: 0; }
 
   .feed-event-main {
-    font-size: 12.5px;
+    font-size: 13px;
     color: var(--claude-cream);
-    line-height: 1.45;
+    line-height: 1.5;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  .ev-agent { color: var(--claude-orange); font-weight: 600; }
-  .ev-action-TRADE { color: var(--accent-green); font-weight: 600; }
-  .ev-action-YIELD { color: var(--accent-blue); font-weight: 600; }
-  .ev-action-REBAL { color: var(--accent-amber); font-weight: 600; }
-  .ev-action-IDLE  { color: var(--claude-sand); }
-  .ev-error        { color: var(--accent-red); font-weight: 600; }
-  .ev-decision     { color: var(--accent-purple); font-weight: 600; }
+  .ev-agent { color: var(--claude-orange); font-weight: 700; }
+  .ev-action-TRADE { color: var(--accent-green); font-weight: 700; }
+  .ev-action-YIELD { color: var(--accent-blue); font-weight: 700; }
+  .ev-action-REBAL { color: var(--accent-amber); font-weight: 700; }
+  .ev-action-IDLE  { color: var(--claude-tan); font-weight: 600; }
+  .ev-error        { color: var(--accent-red); font-weight: 700; }
+  .ev-decision     { color: var(--accent-purple); font-weight: 700; }
 
   .feed-event-meta {
     display: flex;
     gap: 8px;
     align-items: center;
-    margin-top: 3px;
+    margin-top: 4px;
     flex-wrap: wrap;
   }
 
   .feed-event-time {
-    font-size: 10px;
-    color: var(--claude-sand);
+    font-size: 11px;
+    color: var(--claude-tan);
     font-family: var(--font-mono);
+    font-weight: 500;
   }
 
   .feed-event-sig {
-    font-size: 10px;
-    color: var(--claude-sand);
+    font-size: 11px;
+    color: var(--claude-tan);
     font-family: var(--font-mono);
-    background: var(--bg-overlay);
-    padding: 1px 6px;
+    background: var(--bg-elevated);
+    padding: 1px 7px;
     border-radius: 4px;
   }
 
@@ -810,8 +817,9 @@ function getDashboardHTML() {
   }
 
   .controls-label {
-    font-size: 11px;
-    color: var(--claude-sand);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--claude-tan);
     margin-right: 4px;
     letter-spacing: 0.3px;
   }
@@ -822,12 +830,13 @@ function getDashboardHTML() {
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 11px;
+    font-size: 12px;
     font-family: var(--font-mono);
-    color: var(--claude-tan);
+    font-weight: 600;
+    color: var(--claude-cream);
     background: var(--bg-surface);
-    border: 1px solid var(--border);
-    padding: 5px 12px;
+    border: 1px solid var(--border-bright);
+    padding: 5px 14px;
     border-radius: 100px;
   }
 
