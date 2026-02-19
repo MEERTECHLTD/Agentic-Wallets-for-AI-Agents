@@ -69,6 +69,43 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // SSE endpoint – fallback for platforms that block WebSocket upgrades
+  if (req.method === "GET" && req.url === "/api/events") {
+    res.writeHead(200, {
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      "Connection": "keep-alive",
+      "Access-Control-Allow-Origin": "*",
+    });
+    res.flushHeaders();
+
+    // Send initial state
+    const initPayload = JSON.stringify({
+      type: "connected",
+      agentCount: runners.size,
+      agents: AGENT_IDS.map((id) => {
+        const r = runners.get(id);
+        return r ? r.getStats() : { agentId: id, running: false };
+      }),
+    });
+    res.write(`data: ${initPayload}\n\n`);
+
+    sseClients.add(res);
+    logger.info(`Dashboard: new SSE client (total: ${sseClients.size})`);
+
+    // Heartbeat to keep connection alive
+    const hb = setInterval(() => {
+      try { res.write(": heartbeat\n\n"); } catch { clearInterval(hb); }
+    }, 20000);
+
+    req.on("close", () => {
+      sseClients.delete(res);
+      clearInterval(hb);
+      logger.info(`Dashboard: SSE client disconnected (total: ${sseClients.size})`);
+    });
+    return;
+  }
+
   res.writeHead(404);
   res.end("Not found");
 });
@@ -103,10 +140,18 @@ wss.on("connection", (ws) => {
   });
 });
 
+// ── SSE clients (fallback for platforms that block WebSocket) ─────────────────
+const sseClients = new Set();
+
 function broadcast(payload) {
   const str = JSON.stringify(payload);
+  // WebSocket broadcast
   for (const ws of wsClients) {
     if (ws.readyState === 1 /* OPEN */) ws.send(str);
+  }
+  // SSE broadcast
+  for (const res of sseClients) {
+    try { res.write(`data: ${str}\n\n`); } catch { sseClients.delete(res); }
   }
 }
 
@@ -1012,17 +1057,53 @@ const gsTrades      = document.getElementById("gs-trades");
 const gsVolume      = document.getElementById("gs-volume");
 const agentCountBadge = document.getElementById("agentCountBadge");
 
-/* ── WebSocket ────────────────────────────────────────────────── */
+/* ── Connection: WebSocket with SSE fallback ──────────────────── */
+let wsFailCount = 0;
+
 function connect() {
   const proto = location.protocol === "https:" ? "wss:" : "ws:";
   ws = new WebSocket(\`\${proto}//\${location.host}\`);
-  ws.onopen  = () => { setConnected(true); ping(); };
-  ws.onclose = () => { setConnected(false); setTimeout(connect, 3000); };
+
+  const failTimer = setTimeout(() => {
+    // WS didn't open within 4s – switch to SSE
+    ws.close();
+    connectSSE();
+  }, 4000);
+
+  ws.onopen = () => {
+    clearTimeout(failTimer);
+    wsFailCount = 0;
+    setConnected(true);
+    ping();
+  };
+  ws.onclose = () => {
+    clearTimeout(failTimer);
+    setConnected(false);
+    wsFailCount++;
+    if (wsFailCount >= 2) {
+      // WS keeps failing – switch permanently to SSE
+      connectSSE();
+    } else {
+      setTimeout(connect, 3000);
+    }
+  };
+  ws.onerror = () => clearTimeout(failTimer);
   ws.onmessage = (ev) => handleMessage(JSON.parse(ev.data));
 }
 
+function connectSSE() {
+  const es = new EventSource("/api/events");
+  es.onopen = () => setConnected(true);
+  es.onmessage = (ev) => handleMessage(JSON.parse(ev.data));
+  es.onerror = () => {
+    setConnected(false);
+    es.close();
+    setTimeout(connectSSE, 5000);
+  };
+}
+
 function ping() {
-  if (ws.readyState === WebSocket.OPEN) {
+  if (ws && ws.readyState === WebSocket.OPEN) {
     ws.send(JSON.stringify({ type: "ping" }));
     setTimeout(ping, 30000);
   }
