@@ -44,8 +44,15 @@ import { logger } from "../utils/logger.js";
 const PASSPHRASE_ENV = "WALLET_PASSPHRASE";
 
 function getPassphrase() {
-  // In production replace this with a secrets-manager lookup.
-  return process.env[PASSPHRASE_ENV] || "devnet-agent-default-passphrase-change-me";
+  const pp = process.env[PASSPHRASE_ENV];
+  if (!pp) {
+    logger.warn(
+      `[WalletManager] ${PASSPHRASE_ENV} env var not set – using insecure default. ` +
+      `Set WALLET_PASSPHRASE in .env before deploying with real funds.`
+    );
+    return "devnet-agent-default-passphrase-change-me";
+  }
+  return pp;
 }
 
 export class WalletManager {
@@ -193,7 +200,8 @@ export class WalletManager {
       })
     );
 
-    logger.info(`[${this.agentId}] Sending ${amountSOL} SOL → ${destinationAddress}`);
+    const destShort = `${destinationAddress.slice(0, 8)}…${destinationAddress.slice(-6)}`;
+    logger.info(`[${this.agentId}] Sending ${amountSOL} SOL → ${destShort}`);
     const sig = await sendAndConfirmTransaction(conn, tx, [keypair]);
     logger.info(`[${this.agentId}] SOL transfer confirmed – sig: ${sig}`);
     return sig;
