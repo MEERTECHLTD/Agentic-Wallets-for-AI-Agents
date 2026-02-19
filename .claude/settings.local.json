@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npm audit:*)",
+      "Bash(node -e:*)",
+      "Bash(node --input-type=module:*)",
+      "Bash(node --check:*)",
+      "mcp__Windows-MCP__Shell",
+      "mcp__Windows-MCP__Wait",
+      "mcp__Windows-MCP__Snapshot",
+      "mcp__Windows-MCP__App",
+      "mcp__Windows-MCP__Click"
+    ]
+  }
+}

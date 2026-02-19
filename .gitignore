@@ -1,0 +1,8 @@
+node_modules/
+.env
+wallets/
+logs/
+*.wallet.enc
+*.log
+.DS_Store
+Thumbs.db

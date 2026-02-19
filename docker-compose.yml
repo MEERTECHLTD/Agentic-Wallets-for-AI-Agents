@@ -1,0 +1,82 @@
+version: "3.9"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# docker-compose.yml – Agentic Wallets for AI Agents
+#
+# Services:
+#   dashboard  – Web dashboard + 3 agents (port 3000)
+#   agents     – CLI multi-agent harness (no web UI)
+#
+# Quick start:
+#   cp .env.example .env
+#   # Edit WALLET_PASSPHRASE and optionally ANTHROPIC_API_KEY
+#   docker compose up dashboard
+#
+# Scale agents:
+#   docker compose up agents --scale agents=3
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+  # Web dashboard with embedded agents
+  dashboard:
+    build: .
+    command: node src/dashboard/server.js
+    ports:
+      - "3000:3000"
+    volumes:
+      - wallets:/app/wallets
+      - logs:/app/logs
+      - data:/app/data
+    env_file:
+      - .env
+    environment:
+      - AGENT_IDS=agent-01,agent-02,agent-03
+      - DASHBOARD_PORT=3000
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/api/agents',(r)=>{process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Headless multi-agent harness
+  agents:
+    build: .
+    command: node src/harness/multi-agent.js 3 86400
+    volumes:
+      - wallets:/app/wallets
+      - logs:/app/logs
+    env_file:
+      - .env
+    restart: unless-stopped
+    profiles:
+      - headless
+
+  # One-shot demo
+  demo:
+    build: .
+    command: node src/demo.js
+    volumes:
+      - wallets:/app/wallets
+      - logs:/app/logs
+    env_file:
+      - .env
+    profiles:
+      - demo
+
+  # LLM demo (requires ANTHROPIC_API_KEY)
+  llm-demo:
+    build: .
+    command: node src/demo-llm.js
+    volumes:
+      - wallets:/app/wallets
+      - logs:/app/logs
+    env_file:
+      - .env
+    profiles:
+      - llm
+
+volumes:
+  wallets:
+  logs:
+  data:
