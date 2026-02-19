@@ -54,10 +54,11 @@ ENV DASHBOARD_PORT=3000
 # Note: Railway does not allow VOLUME keyword – directories are created at runtime
 # Mount persistent storage via Railway Volumes in the Railway dashboard if needed
 
+# Railway injects PORT at runtime; EXPOSE is informational only
 EXPOSE 3000
 
-HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:3000/api/agents', (r) => { process.exit(r.statusCode === 200 ? 0 : 1); }).on('error', () => process.exit(1));"
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=5 \
+  CMD node -e "const p=process.env.PORT||process.env.DASHBOARD_PORT||3000; require('http').get('http://localhost:'+p+'/api/agents',(r)=>{process.exit(r.statusCode===200?0:1);}).on('error',()=>process.exit(1));"
 
 # Default: run the web dashboard (agents auto-start via setTimeout)
 CMD ["node", "src/dashboard/server.js"]
