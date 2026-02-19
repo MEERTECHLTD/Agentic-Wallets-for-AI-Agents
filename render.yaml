@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: agentic-wallet-dashboard
+    runtime: node
+    buildCommand: npm install
+    startCommand: node src/dashboard/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DASHBOARD_PORT
+        value: 10000
